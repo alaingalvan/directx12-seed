@@ -1,0 +1,9 @@
+[submodule "external/crosswindow"]
+	path = external/crosswindow
+	url = https://github.com/alaingalvan/crosswindow.git
+[submodule "external/crosswindow-graphics"]
+	path = external/crosswindow-graphics
+	url = https://github.com/alaingalvan/crosswindow-graphics.git
+[submodule "external/glm"]
+	path = external/glm
+	url = https://github.com/g-truc/glm.git
