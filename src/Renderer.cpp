@@ -1,5 +1,7 @@
 #include "Renderer.h"
 
+using namespace glm;
+
 // Helper functions
 
 inline void ThrowIfFailed(HRESULT hr)
@@ -336,8 +338,8 @@ void Renderer::initializeResources()
 		path += "\\";
 		std::wstring wpath = std::wstring(path.begin(), path.end());
 
-		std::wstring vertPath = wpath + L"assets/shaders/triangle.vert.hlsl";
-		std::wstring fragPath = wpath + L"assets/shaders/triangle.frag.hlsl";
+		std::wstring vertPath = wpath + L"assets/triangle.vert.hlsl";
+		std::wstring fragPath = wpath + L"assets/triangle.frag.hlsl";
 
 		try
 		{
@@ -791,14 +793,14 @@ void Renderer::setupSwapchain(unsigned width, unsigned height)
 	mViewport.MaxDepth = 1000.f;
 
 	// Update Uniforms
-	float zoom = -2.5f;
+	float zoom = 2.5f;
 
 	// Update matrices
-	uboVS.projectionMatrix = Matrix4::perspective(45.0f, mViewport.Width / mViewport.Height, 0.01f, 1024.0f);
+	uboVS.projectionMatrix = glm::perspective(45.0f, (float)mWidth / (float)mHeight, 0.01f, 1024.0f);
 
-	uboVS.viewMatrix = Matrix4::translation(Vector3(0.0f, 0.0f, zoom)) * Matrix4::rotationZ(3.14f);
+	uboVS.viewMatrix = glm::translate(glm::identity<mat4>(), vec3(0.0f, 0.0f, zoom));
 
-	uboVS.modelMatrix = Matrix4::identity();
+	uboVS.modelMatrix = glm::identity<mat4>();
 
 	if (mSwapchain != nullptr)
 	{
@@ -867,7 +869,9 @@ void Renderer::render()
 		// Update Uniforms
 		mElapsedTime += 0.001f * time;
 		mElapsedTime = fmodf(mElapsedTime, 6.283185307179586f);
-		uboVS.modelMatrix = Matrix4::rotationY(mElapsedTime);
+
+		uboVS.modelMatrix = glm::rotate(uboVS.modelMatrix, 0.001f * time, vec3(0.0f, 1.0f, 0.0f));
+
 
 		D3D12_RANGE readRange;
 		readRange.Begin = 0;

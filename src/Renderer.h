@@ -5,6 +5,7 @@
 
 #define GLM_FORCE_SSE42 1
 #define GLM_FORCE_DEFAULT_ALIGNED_GENTYPES 1
+#define GLM_FORCE_LEFT_HANDED
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
@@ -21,16 +22,11 @@
 inline std::vector<char> readFile(const std::string& filename) {
 	std::string path = filename;
 	char pBuf[1024];
-#ifdef XWIN_WIN32
 
 	_getcwd(pBuf, 1024);
 	path = pBuf;
 	path += "\\";
-#else
-	getcwd(pBuf, 1024);
-	path = pBuf;
-	path += "/";
-#endif
+
 	path += filename;
 	std::ifstream file(path, std::ios::ate | std::ios::binary);
 	bool exists = (bool)file;
@@ -109,9 +105,9 @@ protected:
 
 	Vertex mVertexBufferData[3] =
 	{
-	  { { 1.0f,  1.0f, 0.0f },{ 1.0f, 0.0f, 0.0f } },
-	  { { -1.0f,  1.0f, 0.0f },{ 0.0f, 1.0f, 0.0f } },
-	  { { 0.0f, -1.0f, 0.0f },{ 0.0f, 0.0f, 1.0f } }
+	  { { 1.0f,  -1.0f, 0.0f },{ 1.0f, 0.0f, 0.0f } },
+	  { { -1.0f,  -1.0f, 0.0f },{ 0.0f, 1.0f, 0.0f } },
+	  { { 0.0f, 1.0f, 0.0f },{ 0.0f, 0.0f, 1.0f } }
 	};
 
 	uint32_t mIndexBufferData[3] = { 0, 1, 2 };
