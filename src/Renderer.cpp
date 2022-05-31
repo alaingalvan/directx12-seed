@@ -640,26 +640,26 @@ void Renderer::initializeResources()
         heapProps.CreationNodeMask = 1;
         heapProps.VisibleNodeMask = 1;
 
-        D3D12_RESOURCE_DESC vertexBufferResourceDesc;
-        vertexBufferResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-        vertexBufferResourceDesc.Alignment = 0;
-        vertexBufferResourceDesc.Width = indexBufferSize;
-        vertexBufferResourceDesc.Height = 1;
-        vertexBufferResourceDesc.DepthOrArraySize = 1;
-        vertexBufferResourceDesc.MipLevels = 1;
-        vertexBufferResourceDesc.Format = DXGI_FORMAT_UNKNOWN;
-        vertexBufferResourceDesc.SampleDesc.Count = 1;
-        vertexBufferResourceDesc.SampleDesc.Quality = 0;
-        vertexBufferResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-        vertexBufferResourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
+        D3D12_RESOURCE_DESC indexBufferResourceDesc;
+        indexBufferResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+        indexBufferResourceDesc.Alignment = 0;
+        indexBufferResourceDesc.Width = indexBufferSize;
+        indexBufferResourceDesc.Height = 1;
+        indexBufferResourceDesc.DepthOrArraySize = 1;
+        indexBufferResourceDesc.MipLevels = 1;
+        indexBufferResourceDesc.Format = DXGI_FORMAT_UNKNOWN;
+        indexBufferResourceDesc.SampleDesc.Count = 1;
+        indexBufferResourceDesc.SampleDesc.Quality = 0;
+        indexBufferResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+        indexBufferResourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
 
         ThrowIfFailed(mDevice->CreateCommittedResource(
-            &heapProps, D3D12_HEAP_FLAG_NONE, &vertexBufferResourceDesc,
+            &heapProps, D3D12_HEAP_FLAG_NONE, &indexBufferResourceDesc,
             D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
             IID_PPV_ARGS(&mIndexBuffer)));
 
-        // Copy the triangle data to the vertex buffer.
-        UINT8* pVertexDataBegin;
+        // Copy the triangle indices to the index buffer.
+        UINT8* pIndexDataBegin;
 
         // We do not intend to read from this resource on the CPU.
         D3D12_RANGE readRange;
@@ -667,8 +667,8 @@ void Renderer::initializeResources()
         readRange.End = 0;
 
         ThrowIfFailed(mIndexBuffer->Map(
-            0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin)));
-        memcpy(pVertexDataBegin, mIndexBufferData, sizeof(mIndexBufferData));
+            0, &readRange, reinterpret_cast<void**>(&pIndexDataBegin)));
+        memcpy(pIndexDataBegin, mIndexBufferData, sizeof(mIndexBufferData));
         mIndexBuffer->Unmap(0, nullptr);
 
         // Initialize the vertex buffer view.
